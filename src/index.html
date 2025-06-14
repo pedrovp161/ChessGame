@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo de Xadrez no Navegador</title>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+  <style>
+    canvas {
+      border: 2px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Jogo de Xadrez</h1>
+  <canvas id="pygame-canvas" width="640" height="640"></canvas>
+  <button onclick="startGame()">Iniciar</button>
+
+  <script type="text/javascript">
+    let pyodide;
+
+    async function loadEnvironment() {
+      pyodide = await loadPyodide();
+      await pyodide.loadPackage("micropip");
+      await pyodide.runPythonAsync(`
+import micropip
+await micropip.install("pygame-ce")
+      `);
+    }
+
+    async function startGame() {
+      const response = await fetch("main.py");
+      const code = await response.text();
+      await pyodide.runPythonAsync(code);
+    }
+
+    loadEnvironment();
+  </script>
+</body>
+</html>
