@@ -1,2 +1,4 @@
 tree.py
-src/game/
+index.html
+src/game/__pycache__/
+.venv/
