@@ -11,13 +11,14 @@ class Piece(ABC):
         self.get_possible_moves()
 
     def move(self, target: tuple[int, int], board: pd.DataFrame):
+        self.moved = True
 
         board.iloc[self.location[1], self.location[0]] = "_"
         board.iloc[target[1], target[0]] = self # type: ignore
         self.location = target
 
         self.get_possible_moves()
-    
+
     def get_team(self):
         return "black" if self.direction == 1 else "white"
 
@@ -30,8 +31,10 @@ class Piece(ABC):
         pass
 
     @abstractmethod
+    def set_legal_moves(self, board):
+        pass
+
+    @abstractmethod
     def __str__(self):
         pass
-    
-    
 
