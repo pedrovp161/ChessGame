@@ -1,22 +1,24 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from typing import Literal, Optional
-from themes.skins import Skins
+from logic import GamingLogic
 from timing import timer
-from game import *
 from piece import Piece
 from pawn import Pawn
 from rook import Rook
-from logic import GamingLogic
-import pandas as pd
-import pygame
-import sys
-import os
-from copy import deepcopy
-from time import sleep
+from bishop import Bishop
+from queen import Queen
+from king import King
+from hourse import Hourse
+import const as con
 
-print(os.getcwd())
+
+from typing import Literal, Optional
+import pandas as pd
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from themes.skins import Skins
+
+import pygame
 
 # chess game
 class ChessGame(GamingLogic):
@@ -39,10 +41,25 @@ class ChessGame(GamingLogic):
         # Black pieces
         # self.board.loc['8'] = [f'b{p}' for p in self.piece_order]
         self.board.loc['7'] = [Pawn(x=column, y=1, direction=1) for column in range(self.board.shape[1])]
+        self.board.loc['8', "a"] = Rook(x=0, y=0, direction=1) #type: ignore
+        self.board.loc['8', "b"] = Hourse(x=1, y=0, direction=1) #type: ignore
+        self.board.loc['8', "c"] = Bishop(x=2, y=0, direction=1) #type: ignore
+        self.board.loc['8', "d"] = Queen(x=3, y=0, direction=1) #type: ignore
+        self.board.loc['8', "e"] = King(x=4, y=0, direction=1) #type: ignore
+        self.board.loc['8', "f"] = Bishop(x=5, y=0, direction=1) #type: ignore
+        self.board.loc['8', "g"] = Hourse(x=6, y=0, direction=1) #type: ignore
+        self.board.loc['8', "h"] = Rook(x=7, y=0, direction=1) #type: ignore
 
         # White pieces
         self.board.loc['2'] = [Pawn(x=column, y=6, direction=-1) for column in range(self.board.shape[1])]
-        self.board.loc['1', "a"] = Rook(x=0, y=0, direction=-1) #type: ignore
+        self.board.loc['1', "a"] = Rook(x=0, y=7, direction=-1) #type: ignore
+        self.board.loc['1', "b"] = Hourse(x=1, y=7, direction=-1) #type: ignore
+        self.board.loc['1', "c"] = Bishop(x=2, y=7, direction=-1) #type: ignore
+        self.board.loc['1', "d"] = Queen(x=3, y=7, direction=-1) #type: ignore
+        self.board.loc['1', "e"] = King(x=4, y=7, direction=-1) #type: ignore
+        self.board.loc['1', "f"] = Bishop(x=5, y=7, direction=-1) #type: ignore
+        self.board.loc['1', "g"] = Hourse(x=6, y=7, direction=-1) #type: ignore
+        self.board.loc['1', "h"] = Rook(x=7, y=7, direction=-1) #type: ignore
 
         # trocando nan para '_'
         self.board = self.board.fillna("_")
@@ -53,12 +70,12 @@ class ChessGame(GamingLogic):
         WHITE, BLACK, LIGHT_SQUARE, DARK_SQUARE = skin.default_skin()
 
         # Draw chess board with alternating colors
-        for row in range(BOARD_SIZE):
-            for col in range(BOARD_SIZE):
+        for row in range(con.BOARD_SIZE):
+            for col in range(con.BOARD_SIZE):
                 color = LIGHT_SQUARE if (row + col) % 2 == 0 else DARK_SQUARE
                 pygame.draw.rect(self.screen, 
                                  color, 
-                                 (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
+                                 (col * con.SQUARE_SIZE, row * con.SQUARE_SIZE, con.SQUARE_SIZE, con.SQUARE_SIZE)
                                  )
                 
                 # Draw pieces
@@ -75,11 +92,11 @@ class ChessGame(GamingLogic):
                 else:
                     print(f"Invalid piece string: {piece}")
                     break
-                self.screen.blit(text, (col * SQUARE_SIZE + 30, row * SQUARE_SIZE + 30)) 
+                self.screen.blit(text, (col * con.SQUARE_SIZE + 30, row * con.SQUARE_SIZE + 30)) 
     # @timer
     def setup(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
+        self.screen = pygame.display.set_mode((con.WINDOW_SIZE, con.WINDOW_SIZE))
         pygame.display.set_caption('Chess Game')
         self.initialize_board()
     
@@ -110,14 +127,14 @@ class ChessGame(GamingLogic):
         if isinstance(self.selected_piece, Piece): #type: ignore
             for move in self.legal_moves[0]:
                 col, row = move
-                center = (col * SQUARE_SIZE + SQUARE_SIZE // 2,
-                        row * SQUARE_SIZE + SQUARE_SIZE // 2)
+                center = (col * con.SQUARE_SIZE + con.SQUARE_SIZE // 2,
+                        row * con.SQUARE_SIZE + con.SQUARE_SIZE // 2)
                 pygame.draw.circle(self.screen, color="lightblue", center=center, radius=10)
 
             for move in self.legal_moves[1]:
                 col, row = move
-                center = (col * SQUARE_SIZE + SQUARE_SIZE // 2,
-                        row * SQUARE_SIZE + SQUARE_SIZE // 2)
+                center = (col * con.SQUARE_SIZE + con.SQUARE_SIZE // 2,
+                        row * con.SQUARE_SIZE + con.SQUARE_SIZE // 2)
                 pygame.draw.circle(self.screen, color="firebrick", center=center, radius=10)
         
         pygame.display.flip()

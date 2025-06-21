@@ -33,7 +33,6 @@ class Pawn(Piece):
 
     def move(self, target: tuple[int, int], board: pd.DataFrame):
         super().move(target, board)
-        print("Ocorreu um movimento")
 
     # @timer
     def set_legal_moves(self, board: pd.DataFrame):
@@ -71,7 +70,7 @@ class Pawn(Piece):
                 if self.get_team() != next_pos.get_team():
                     legal_moves[1].append(move)
 
-        print("legal:", legal_moves)
+        # print("legal:", legal_moves)
         self.legal_moves = legal_moves
 
         return legal_moves

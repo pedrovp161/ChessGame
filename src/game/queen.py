@@ -1,7 +1,7 @@
 from piece import Piece
 import pandas as pd
 
-class Rook(Piece):
+class Queen(Piece):
     def __init__(self, x, y, direction):
         super().__init__(x, y, direction)
 
@@ -9,6 +9,40 @@ class Rook(Piece):
         x, y = self.location
         moves = []
 
+        #### primeiro o mov do bispo
+        # Diagonal direita baixo
+        for i in range(1, 8):
+            nx, ny = x + i, y + i
+            if 0 <= nx < 8 and 0 <= ny < 8:
+                moves.append((nx, ny))
+            else:
+                break
+
+        # Diagonal esquerda cima
+        for i in range(1, 8):
+            nx, ny = x - i, y - i
+            if 0 <= nx < 8 and 0 <= ny < 8:
+                moves.append((nx, ny))
+            else:
+                break
+
+        # Diagonal direita cima
+        for i in range(1, 8):
+            nx, ny = x + i, y - i
+            if 0 <= nx < 8 and 0 <= ny < 8:
+                moves.append((nx, ny))
+            else:
+                break
+
+        # Diagonal esquerda baixo
+        for i in range(1, 8):
+            nx, ny = x - i, y + i
+            if 0 <= nx < 8 and 0 <= ny < 8:
+                moves.append((nx, ny))
+            else:
+                break
+
+        ######### agora os da torre:
         # Para a direita
         for dx in range(x + 1, 8):
             moves.append((dx, y))
@@ -25,7 +59,7 @@ class Rook(Piece):
         self.possible_moves = (moves, [])
         
     def get_moves(self):
-        return [(1,0), (-1,0), (0,1), (0,-1)]
+        return [(1,1), (1,-1), (-1,1), (-1,-1), (1,0), (-1,0), (0,1), (0,-1)]
 
     def move(self, target: tuple[int, int], board: pd.DataFrame):
         super().move(target, board)
@@ -54,5 +88,4 @@ class Rook(Piece):
         return legal_moves
     
     def __str__(self):
-        return "R" # "bP" if self.direction == 1 else "wP"
-        
+        return "Q"

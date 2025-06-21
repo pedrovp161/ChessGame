@@ -1,7 +1,7 @@
 import pygame
 from timing import timer
-from game import *
 from piece import Piece
+import const as con 
 
 class GamingLogic():
         def __init__(self) -> None:
@@ -20,8 +20,8 @@ class GamingLogic():
 
         def handle_click(self, pos):
             # Convert pixel position to board coordinates
-            col = pos[0] // SQUARE_SIZE
-            row = pos[1] // SQUARE_SIZE
+            col = pos[0] // con.SQUARE_SIZE
+            row = pos[1] // con.SQUARE_SIZE
 
             if not self.board_is_fliped:
                 board_row = int(row)

@@ -1,7 +1,7 @@
 from piece import Piece
 import pandas as pd
 
-class Rook(Piece):
+class Bishop(Piece):
     def __init__(self, x, y, direction):
         super().__init__(x, y, direction)
 
@@ -9,23 +9,42 @@ class Rook(Piece):
         x, y = self.location
         moves = []
 
-        # Para a direita
-        for dx in range(x + 1, 8):
-            moves.append((dx, y))
-        # Para a esquerda
-        for dx in range(x - 1, -1, -1):
-            moves.append((dx, y))
-        # Para baixo
-        for dy in range(y + 1, 8):
-            moves.append((x, dy))
-        # Para cima
-        for dy in range(y - 1, -1, -1):
-            moves.append((x, dy))
+        # Diagonal direita baixo
+        for i in range(1, 8):
+            nx, ny = x + i, y + i
+            if 0 <= nx < 8 and 0 <= ny < 8:
+                moves.append((nx, ny))
+            else:
+                break
+
+        # Diagonal esquerda cima
+        for i in range(1, 8):
+            nx, ny = x - i, y - i
+            if 0 <= nx < 8 and 0 <= ny < 8:
+                moves.append((nx, ny))
+            else:
+                break
+
+        # Diagonal direita cima
+        for i in range(1, 8):
+            nx, ny = x + i, y - i
+            if 0 <= nx < 8 and 0 <= ny < 8:
+                moves.append((nx, ny))
+            else:
+                break
+
+        # Diagonal esquerda baixo
+        for i in range(1, 8):
+            nx, ny = x - i, y + i
+            if 0 <= nx < 8 and 0 <= ny < 8:
+                moves.append((nx, ny))
+            else:
+                break
 
         self.possible_moves = (moves, [])
         
     def get_moves(self):
-        return [(1,0), (-1,0), (0,1), (0,-1)]
+        return [(1, 1), (1, -1), (-1, 1), (-1, -1)]
 
     def move(self, target: tuple[int, int], board: pd.DataFrame):
         super().move(target, board)
@@ -52,7 +71,5 @@ class Rook(Piece):
 
         self.legal_moves = legal_moves
         return legal_moves
-    
     def __str__(self):
-        return "R" # "bP" if self.direction == 1 else "wP"
-        
+        return "B"
